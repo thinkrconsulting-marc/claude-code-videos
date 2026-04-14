@@ -425,7 +425,7 @@
             content.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>Data laden...</p></div>';
 
             try {
-                const response = await fetch('.tmp/youtube_results.json');
+                const response = await fetch('youtube_results.json');
                 if (!response.ok) throw new Error('Kan data niet laden');
 
                 allVideos = await response.json();
