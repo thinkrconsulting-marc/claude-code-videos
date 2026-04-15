@@ -612,7 +612,7 @@
                 btn.disabled = true;
                 btn.textContent = '⏳ Bezig met updaten...';
 
-                const response = await fetch('http://localhost:5000/trigger-update', {
+                const response = await fetch('https://claude-code-videos-production.up.railway.app/trigger-update', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -630,7 +630,7 @@
                 }
             } catch (error) {
                 btn.textContent = '⚠️ Kan server niet bereiken';
-                alert(`⚠️ Kan webhook-server niet bereiken.\n\nZorg dat je de webhook server draait:\npython tools/webhook_server.py`);
+                alert(`⚠️ Kan webhook-server niet bereiken.\n\nZorg dat Railway aan staat en je GITHUB_TOKEN correct is ingesteld.`);
                 console.error('Webhook error:', error);
             } finally {
                 setTimeout(() => {
