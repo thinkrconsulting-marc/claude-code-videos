@@ -382,6 +382,7 @@
             </div>
 
             <button onclick="loadData()">🔄 Vernieuwen</button>
+            <button onclick="triggerUpdate()" id="updateBtn">⚡ Update Videos</button>
         </div>
 
         <div class="stats" id="stats"></div>
@@ -600,6 +601,42 @@
                         break;
                 }
                 renderVideos(sorted, false);
+            }
+        }
+
+        async function triggerUpdate() {
+            const btn = document.getElementById('updateBtn');
+            const originalText = btn.textContent;
+
+            try {
+                btn.disabled = true;
+                btn.textContent = '⏳ Bezig met updaten...';
+
+                const response = await fetch('http://localhost:5000/trigger-update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    btn.textContent = '✅ Update gestart!';
+                    alert('✅ Video-update gestart! Controleer GitHub Actions voor status.\n\nHet kan even duren voordat de videos beschikbaar zijn.');
+                } else {
+                    btn.textContent = '❌ Fout';
+                    alert(`❌ Fout bij update: ${data.message}`);
+                }
+            } catch (error) {
+                btn.textContent = '⚠️ Kan server niet bereiken';
+                alert(`⚠️ Kan webhook-server niet bereiken.\n\nZorg dat je de webhook server draait:\npython tools/webhook_server.py`);
+                console.error('Webhook error:', error);
+            } finally {
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }, 2000);
             }
         }
 
