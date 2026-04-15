@@ -10,6 +10,7 @@ import os
 import json
 import logging
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from dotenv import load_dotenv
 import requests
 
@@ -23,6 +24,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_OWNER = "thinkrconsulting-marc"
