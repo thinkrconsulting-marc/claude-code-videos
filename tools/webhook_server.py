@@ -91,7 +91,8 @@ def status():
 
 
 if __name__ == "__main__":
+    port = int(os.getenv("PORT", 5000))
     logger.info(f"Starting webhook server for {REPO_OWNER}/{REPO_NAME}")
-    logger.info("Server running on http://localhost:5000")
-    logger.info("Trigger update at: POST http://localhost:5000/trigger-update")
-    app.run(debug=False, port=5000)
+    logger.info(f"Server running on http://localhost:{port}")
+    logger.info(f"Trigger update at: POST http://localhost:{port}/trigger-update")
+    app.run(debug=False, port=port, host="0.0.0.0")
