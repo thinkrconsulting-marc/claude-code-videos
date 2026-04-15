@@ -397,24 +397,27 @@
         function detectLanguage(text) {
             if (!text) return 'other';
 
-            // Common English words
-            const englishWords = ['how', 'learn', 'build', 'tutorial', 'guide', 'master', 'full', 'tips', 'skills', 'code', 'claude', 'ai'];
-            // Common Dutch words
-            const dutchWords = ['hoe', 'leer', 'bouw', 'les', 'gids', 'beheers', 'volledige', 'tips', 'vaardigheden', 'code'];
+            // Common English words (tech + general)
+            const englishWords = ['how', 'learn', 'build', 'tutorial', 'guide', 'master', 'full', 'tips', 'skills', 'code', 'claude', 'ai', 'setup', 'install', 'create', 'develop', 'api', 'function', 'javascript', 'python'];
+
+            // Common Dutch words (tech + general)
+            const dutchWords = ['hoe', 'leer', 'bouw', 'les', 'gids', 'beheers', 'volledige', 'tips', 'vaardigheden', 'code', 'installeer', 'maak', 'ontwikkel', 'functie', 'python', 'javascript', 'gids', 'cursus', 'uitleg', 'stap', 'stappen', 'beginners', 'nederlands'];
 
             const lowerText = text.toLowerCase();
 
             let englishCount = englishWords.filter(word => lowerText.includes(word)).length;
             let dutchCount = dutchWords.filter(word => lowerText.includes(word)).length;
 
+            // Check for specific Dutch patterns
+            const dutchPatterns = /\b(van|de|het|een|voor|met|op|in|als|meer|deel|eerste|tweede)\b/gi;
+            dutchCount += (lowerText.match(dutchPatterns) || []).length * 0.5;
+
             // If very few matches, check character patterns
             if (englishCount + dutchCount < 2) {
-                // Dutch characters: ij, uu, aa, etc.
-                if (/[áéíóúàèìòù]/.test(lowerText) || /(ch|sch|ng|nk)/.test(lowerText)) {
-                    dutchCount += 1;
+                // Dutch characters and patterns
+                if (/ij|uu|aa|ee|oo|[áéíóúàèìòù]|sch|th|ng|nk/.test(lowerText)) {
+                    dutchCount += 0.5;
                 }
-                // English is more likely by default for tech content
-                englishCount += 1;
             }
 
             if (dutchCount > englishCount) return 'nl';
